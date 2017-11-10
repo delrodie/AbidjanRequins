@@ -1,16 +1,58 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>User creation</h1>
 
-    {{ form_start(form) }}
-        {{ form_widget(form) }}
-        <input type="submit" value="Create" />
-    {{ form_end(form) }}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="pull-right">
+          <a href="{{ path('admin_user_index') }}">
+            <button type="button" class="btn btn-primary btn-labeled"><i class="zmdi zmdi-assignment-o zmdi-hc-lg"></i>
+                  <span class="btn-label btn-label-right">Liste des utilisateurs</span>
+            </button>
+          </a>
+        </div>
+          <h3 class="m-y-0">Enregistrement</h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            {{ form_start(form, {'attr': {'data-toggle': 'validator'}} )}}
+                <div class="form-group">
+                  <label for="" class="control-label">Nom utilisateur</label>
+                  {{ form_widget(form.username)}}
+                  {{ form_errors(form.username)}}
+                  <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                  <label for="" class="control-label">Adresse email</label>
+                  {{ form_widget(form.email)}}
+                  {{ form_errors(form.email)}}
+                  <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                  {{ form_widget(form.plainPassword)}}
+                  {{ form_errors(form.plainPassword)}}
+                  <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                  <label class="custom-control custom-control-info custom-checkbox active">
+                    {{ form_widget(form.enabled)}}
+                    {{ form_errors(form.enabled)}}
+                    <span class="custom-control-indicator"></span>
+                    <span class="custom-control-label">
+                      <label for="">Activer</label>
+                    </span>
+                  </label>
 
-    <ul>
-        <li>
-            <a href="{{ path('admin_user_index') }}">Back to the list</a>
-        </li>
-    </ul>
+                </div>
+                {{ form_widget(form) }}
+                <div class="col-sm-6 col-md-4 col-sm-offset-6 col-md-offset-8">
+                  <input type="submit" class="btn btn-primary btn-block" value="Enregistrer" />
+                </div>
+            {{ form_end(form) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
 {% endblock %}

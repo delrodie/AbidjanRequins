@@ -47,9 +47,9 @@ class UserController extends Controller
             $em = $this->getDoctrine()->getManager();
             $user->setEnabled(true);
             $em->persist($user);
-            $em->flush();
+            $em->flush(); //dump($user);die();
 
-            return $this->redirectToRoute('admin_user_show', array('id' => $user->getId()));
+            return $this->redirectToRoute('admin_user_index');
         }
 
         return $this->render('user/new.html.twig', array(
@@ -84,7 +84,7 @@ class UserController extends Controller
     {
         $deleteForm = $this->createDeleteForm($user);
         $editForm = $this->createForm('AppBundle\Form\UserType', $user, array(
-            'action' => $this->generateUrl('admin_user_edit', array('id' => $user->getId())),
+            'action' => $this->generateUrl('admin_user_index'),
             //'method' => 'PUT',
             'passwordRequired' => false,
             //'lockedRequired' => true
@@ -94,7 +94,7 @@ class UserController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('admin_user_edit', array('id' => $user->getId()));
+            return $this->redirectToRoute('admin_user_index');
         }
 
         return $this->render('user/edit.html.twig', array(
