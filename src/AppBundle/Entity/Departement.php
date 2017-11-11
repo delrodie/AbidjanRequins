@@ -43,6 +43,11 @@ class Departement
      */
     private $type;
 
+   /**
+   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Programme", mappedBy="departement")
+   */
+   private $programmes;
+
     /**
      * @var string
      *
@@ -284,5 +289,50 @@ class Departement
     public function getType()
     {
         return $this->type;
+    }
+
+    public function __toString() {
+        return $this->getNom();
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->programmes = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add programme
+     *
+     * @param \AppBundle\Entity\Programme $programme
+     *
+     * @return Departement
+     */
+    public function addProgramme(\AppBundle\Entity\Programme $programme)
+    {
+        $this->programmes[] = $programme;
+
+        return $this;
+    }
+
+    /**
+     * Remove programme
+     *
+     * @param \AppBundle\Entity\Programme $programme
+     */
+    public function removeProgramme(\AppBundle\Entity\Programme $programme)
+    {
+        $this->programmes->removeElement($programme);
+    }
+
+    /**
+     * Get programmes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProgrammes()
+    {
+        return $this->programmes;
     }
 }
