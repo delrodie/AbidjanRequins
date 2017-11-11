@@ -39,6 +39,13 @@ class Departement
     /**
      * @var string
      *
+     * @ORM\Column(name="type", type="string", length=255, nullable=true)
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
      * @Gedmo\Slug(fields={"nom"})
      * @ORM\Column(name="slug", type="string", length=75)
      */
@@ -253,5 +260,29 @@ class Departement
     public function getModifieLe()
     {
         return $this->modifieLe;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Departement
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }

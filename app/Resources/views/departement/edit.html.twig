@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification des departements{% endblock %}
+
+{% block body %}
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="pull-right">
+          <a href="{{ path('admin_departement_index') }}">
+            <button type="button" class="btn btn-primary btn-labeled"><i class="zmdi zmdi-assignment-o zmdi-hc-lg"></i>
+                  <span class="btn-label btn-label-right">Liste des departements</span>
+            </button>
+          </a>
+        </div>
+          <h3 class="m-y-0">Modification</h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            {{ form_start(edit_form, {'attr': {'data-toggle': 'validator'}} )}}
+                <div class="form-group">
+                  <label for="" class="control-label">Type </label>
+                  {{ form_widget(edit_form.type)}}
+                  {{ form_errors(edit_form.type)}}
+                  <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                  <label for="" class="control-label">Nom </label>
+                  {{ form_widget(edit_form.nom)}}
+                  {{ form_errors(edit_form.nom)}}
+                  <div class="help-block with-errors"></div>
+                </div>
+                <div class="form-group">
+                  <label for="" class="control-label">Couleur</label>
+                  {{ form_widget(edit_form.couleur)}}
+                  {{ form_errors(edit_form.couleur)}}
+                  <div class="help-block with-errors"></div>
+                </div>
+                {{ form_widget(edit_form) }}
+                <div class="col-sm-6 col-md-4 col-sm-offset-6 col-md-offset-8">
+                  <input type="submit" class="btn btn-primary btn-block" value="Modifier" />
+                </div>
+            {{ form_end(edit_form) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('ressources/vendor/jpicker/css/jPicker-1.1.6.min.css')}}">
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('ressources/vendor/jpicker/jPicker-1.1.6.min.js')}}"></script>
+<script type="text/javascript">
+      $(document).ready(
+        function()
+        {
+          $('#appbundle_departement_couleur').jPicker();
+        });
+    </script>
+{% endblock %}
