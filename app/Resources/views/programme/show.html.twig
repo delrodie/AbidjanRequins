@@ -1,0 +1,72 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Programme</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ programme.id }}</td>
+            </tr>
+            <tr>
+                <th>Activite</th>
+                <td>{{ programme.activite }}</td>
+            </tr>
+            <tr>
+                <th>Cible</th>
+                <td>{{ programme.cible }}</td>
+            </tr>
+            <tr>
+                <th>Objectif</th>
+                <td>{{ programme.objectif }}</td>
+            </tr>
+            <tr>
+                <th>Periode</th>
+                <td>{{ programme.periode }}</td>
+            </tr>
+            <tr>
+                <th>Flag</th>
+                <td>{{ programme.flag }}</td>
+            </tr>
+            <tr>
+                <th>Statut</th>
+                <td>{% if programme.statut %}Yes{% else %}No{% endif %}</td>
+            </tr>
+            <tr>
+                <th>Slug</th>
+                <td>{{ programme.slug }}</td>
+            </tr>
+            <tr>
+                <th>Publiepar</th>
+                <td>{{ programme.publiePar }}</td>
+            </tr>
+            <tr>
+                <th>Modifiepar</th>
+                <td>{{ programme.modifiePar }}</td>
+            </tr>
+            <tr>
+                <th>Publiele</th>
+                <td>{{ programme.publieLe }}</td>
+            </tr>
+            <tr>
+                <th>Modifiele</th>
+                <td>{{ programme.modifieLe }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('programme_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('programme_edit', { 'id': programme.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

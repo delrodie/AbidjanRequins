@@ -39,6 +39,13 @@ class Programme
     /**
      * @var string
      *
+     * @ORM\Column(name="lieu", type="string", length=255, nullable=true)
+     */
+    private $lieu;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="objectif", type="text", nullable=true)
      */
     private $objectif;
@@ -46,9 +53,16 @@ class Programme
     /**
      * @var string
      *
-     * @ORM\Column(name="periode", type="string", length=255, nullable=true)
+     * @ORM\Column(name="detadeb", type="string", length=255, nullable=true)
      */
-    private $periode;
+    private $datedeb;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="datefin", type="string", length=255, nullable=true)
+     */
+    private $datefin;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Departement", inversedBy="programmes")
@@ -73,7 +87,7 @@ class Programme
     /**
      * @var string
      *
-     * @Gedmo\Slug(fields={"activite","periode"})
+     * @Gedmo\Slug(fields={"activite","datedeb","datefin"})
      * @ORM\Column(name="slug", type="string", length=255)
      */
     private $slug;
@@ -407,5 +421,77 @@ class Programme
     public function getDepartement()
     {
         return $this->departement;
+    }
+
+    /**
+     * Set datedeb
+     *
+     * @param string $datedeb
+     *
+     * @return Programme
+     */
+    public function setDatedeb($datedeb)
+    {
+        $this->datedeb = $datedeb;
+
+        return $this;
+    }
+
+    /**
+     * Get datedeb
+     *
+     * @return string
+     */
+    public function getDatedeb()
+    {
+        return $this->datedeb;
+    }
+
+    /**
+     * Set datefin
+     *
+     * @param string $datefin
+     *
+     * @return Programme
+     */
+    public function setDatefin($datefin)
+    {
+        $this->datefin = $datefin;
+
+        return $this;
+    }
+
+    /**
+     * Get datefin
+     *
+     * @return string
+     */
+    public function getDatefin()
+    {
+        return $this->datefin;
+    }
+
+    /**
+     * Set lieu
+     *
+     * @param string $lieu
+     *
+     * @return Programme
+     */
+    public function setLieu($lieu)
+    {
+        $this->lieu = $lieu;
+
+        return $this;
+    }
+
+    /**
+     * Get lieu
+     *
+     * @return string
+     */
+    public function getLieu()
+    {
+        return $this->lieu;
     }
 }

@@ -10,4 +10,26 @@ namespace AppBundle\Repository;
  */
 class ProgrammeRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * Liste des programmes
+     * dont la date est superieures a celle de la date encours
+     *
+     * @author: Delrodie AMOIKON
+     * @version: v1.0
+     * @date: 11/11/2017 20:35
+     */
+    public function findProgrammeAdmin()
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQuery('
+                      SELECT p, d
+                      FROM AppBundle:Programme p
+                      LEFT JOIN p.departement d
+                      WHERE p.datedeb >= :date
+                      ORDER BY p.datedeb ASC
+                '  )
+                ->setParameter('date', date('Y-m-d', time()));
+        ;
+        return $qb->getResult();
+    }
 }
