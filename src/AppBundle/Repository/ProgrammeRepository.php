@@ -32,4 +32,50 @@ class ProgrammeRepository extends \Doctrine\ORM\EntityRepository
         ;
         return $qb->getResult();
     }
+
+    /**
+     * Liste des programmes non traiter
+     *
+     * @author: Delrodie AMOIKON
+     * @version: v1.0
+     * @date: 11/11/2017 21:35
+     */
+    public function findProgrammeNonTraiter()
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQuery('
+                      SELECT p, d
+                      FROM AppBundle:Programme p
+                      LEFT JOIN p.departement d
+                      WHERE p.flag LIKE :flag
+                      ORDER BY p.datedeb ASC
+                '  )
+                ->setParameter('flag', 'A traiter');
+        ;
+        return $qb->getResult();
+    }
+
+    /**
+     * Liste des programmes non traiter lot de 10
+     *
+     * @author: Delrodie AMOIKON
+     * @version: v1.0
+     * @date: 11/11/2017 22:02
+     */
+    public function findProgrammeNonTraiterFiltre($offset, $limit)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQuery('
+                      SELECT p, d
+                      FROM AppBundle:Programme p
+                      LEFT JOIN p.departement d
+                      WHERE p.flag LIKE :flag
+                      ORDER BY p.datedeb ASC
+                '  )
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->setParameter('flag', 'A traiter');
+        ;
+        return $qb->getResult();
+    }
 }

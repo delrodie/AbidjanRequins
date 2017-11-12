@@ -62,6 +62,7 @@ class ProgrammeType extends AbstractType
             ->add('flag', ChoiceType::class, array(
                   'choices' => array(
                     '-- '  => '',
+                    'A TRAITER '  => 'A traiter',
                     'A REVOIR '  => 'A revoir',
                     'REJETER '  => 'Rejeter',
                     'VALIDER '  => 'valider',

@@ -18,4 +18,22 @@ class DefaultController extends Controller
             'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
         ]);
     }
+
+    /**
+     * Calendrier non traiter
+     *
+     * @Route("/calendrier/non-traiter", name="calendrier_non_traiter")
+     */
+    public function calendrierNontraiterAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $programmes = $em->getRepository('AppBundle:Programme')->findProgrammeNonTraiter();
+        $miniprogrammes = $em->getRepository('AppBundle:Programme')->findProgrammeNonTraiterFiltre(0, 10);
+
+        return $this->render('default/calendrier.html.twig', array(
+              'programmes'  => $programmes,
+              'miniprogrammes'  => $miniprogrammes,
+        ));
+    }
 }
