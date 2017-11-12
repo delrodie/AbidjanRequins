@@ -78,4 +78,79 @@ class ProgrammeRepository extends \Doctrine\ORM\EntityRepository
         ;
         return $qb->getResult();
     }
+
+    /**
+     * Liste des $limit activités
+     * dont la date est superieures a celle de la date encours
+     *
+     * @author: Delrodie AMOIKON
+     * @version: v1.0
+     * @date: 12/11/2017 10:54
+     */
+    public function findActiviteLatest($offset, $limit)
+    {
+        $em = $this->getEntityManager();
+        $qb = $em->createQuery('
+                      SELECT p, d
+                      FROM AppBundle:Programme p
+                      LEFT JOIN p.departement d
+                      WHERE p.datedeb >= :date
+                      ORDER BY p.datedeb ASC
+                '  )
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->setParameter('date', date('Y-m-d', time()));
+        ;
+        return $qb->getResult();
+    }
+
+    /**
+     * Calcul du nombre total d'activités enregistrées
+     *
+     * @author: Delrodie AMOIKON
+     * @version: v1.0
+     * @since: 12/11/2017 11:23
+     */
+    public function countActiviteTotal()
+    {
+        $qb = $this->createQueryBuilder('p')
+                   ->select('count(p.id)')
+                   ->where('p.statut = 1')
+                   ->getQuery()->getSingleScalarResult();
+        ;
+
+        return $qb;
+    }
+
+    /**
+     * Calcul du nombre total d'activités dediées au jeunes
+     *
+     * @author: Delrodie AMOIKON
+     * @version: v1.0
+     * @since: 12/11/2017 11:40
+     */
+    public function countActiviteJeune()
+    {
+        $qb = $this->createQueryBuilder('p')
+                   ->select('count(p.id)')
+                   ->where('p.statut = 1')
+                   ->andWhere("p.cible LIKE :scout")
+                   ->orWhere("p.cible LIKE :jeune")
+                   ->orWhere("p.cible LIKE :lou")
+                   ->orWhere("p.cible LIKE :eclair")
+                   ->orWhere("p.cible LIKE :chemin")
+                   ->orWhere("p.cible LIKE :rout")
+                   ->setParameters(array(
+                       'scout' => '%scout%',
+                       'jeune'  => '%jeune%',
+                       'lou'  => '%lou%',
+                       'eclair'  => '%eclair%',
+                       'chemin'  => '%chemin%',
+                       'rout'  => '%rout%',
+                   ))
+                   ->getQuery()->getSingleScalarResult();
+        ;
+
+        return $qb;
+    }
 }

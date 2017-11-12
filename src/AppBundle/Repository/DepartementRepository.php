@@ -10,4 +10,24 @@ namespace AppBundle\Repository;
  */
 class DepartementRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * Liste des departements par categorie
+     *
+     * @author: Delrodie AMOIKON
+     * @version: v1.0
+     * @since: 12/11/2017 12:10
+     */
+    public function findListDistrict($categorie)
+    {
+        $em = $this->getEntityManager();
+        return $qb = $em->createQuery('
+                          SELECT d
+                          FROM AppBundle:Departement d
+                          Where d.nom LIKE :categorie
+                          ORDER BY d.nom ASC
+                      ')
+                      ->setParameter('categorie', '%'.$categorie.'%')
+                      ->getResult()
+                      ;
+    }
 }

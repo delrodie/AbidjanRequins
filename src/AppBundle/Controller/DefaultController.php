@@ -13,9 +13,20 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
+        $em = $this->getDoctrine()->getManager();
+        //Liste de 15 activités
+        $activites = $em->getRepository('AppBundle:Programme')->findActiviteLatest($offset = 0, $limit = 10);
+
+        // Statistiques acticvités
+        $activiteTotale = $em->getRepository('AppBundle:Programme')->countActiviteTotal();
+        $activiteJeune = $em->getRepository('AppBundle:Programme')->countActiviteJeune();
+        $activiteChef = $activiteTotale - $activiteJeune;
+
+        return $this->render('default/dashbord.html.twig', [
+              'activites' => $activites,
+              'activiteTotale' => $activiteTotale,
+              'activiteJeune' => $activiteJeune,
+              'activiteChef' => $activiteChef,
         ]);
     }
 

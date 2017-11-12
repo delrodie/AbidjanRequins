@@ -51,7 +51,13 @@
                       <td>{{ programme.objectif }}</td>
                       <td class="text-center">
                         {% if programme.flag %}
-                            {{ programme.flag }}
+                          {% if programme.flag == 'Valider' %}
+                          <span class="label label-outline-success">{{ programme.flag }}</span>
+                          {% elseif programme.flag == 'A revoir' %}
+                          <span class="label label-outline-warning">{{ programme.flag }}</span>
+                          {% else %}
+                          <span class="label label-outline-info">{{ programme.flag }}</span>
+                          {% endif %}
                         {% else %}
                             <span>Encours...</span>
                         {% endif %}
