@@ -58,7 +58,8 @@ class UserType extends AbstractType
             //->add('lastLogin')->add('confirmationToken')->add('passwordRequestedAt')
             ->add('roles', ChoiceType::class, array(
               'choices' => array(
-                'UTILISATEUR '  => 'ROLE_USER',
+                'DISTRICT '  => 'ROLE_DISTRICT',
+                'EQUIPE REGIONALE '  => 'ROLE_EREGIONALE',
                 'ADMINISTRATEUR '  => 'ROLE_ADMIN',
               ),
               'multiple'  => true,

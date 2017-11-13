@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="row">
+  <div class="col-sm-9">
+    <div class="panel panel-default m-b-0">
+      <div class="panel-heading">
+        <h3 class="m-y-0">Calendrier des activités</h3>
+      </div>
+      <div class="panel-body">
+        <div id="calendar"></div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="panel panel-default m-b-0">
+      <div class="panel-heading">
+        <h3 class="m-y-0">Activités proches</h3>
+      </div>
+      <div class="panel-body">
+        <div id="external-events">
+          {% for miniprogramme in miniprogrammes %}
+          <div class="fc-event mb-0-5" style="background-color: #{{ miniprogramme.departement.couleur}};">
+            <a href="{{ path('programme_edit', {'id': miniprogramme.id })}}" style="color: white;" target="_blank">
+              {% if miniprogramme.datedeb == miniprogramme.datefin %}
+                  {{ miniprogramme.datedeb|date('d-m-Y')}}
+              {% else %}
+                  {{ miniprogramme.datedeb|date('d-m-Y') }} au {{ miniprogramme.datefin|date('d-m-Y')}}
+              {% endif %}
+              <br>{{ miniprogramme.departement.nom}}: {{ miniprogramme.activite }}
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script>
+"use strict";
+! function(a) {
+  a("#external-events .fc-event").each(function() {
+      a(this).data("event", {
+          title: a.trim(a(this).text()),
+          stick: !0
+      }), a(this).draggable({ zIndex: 999, revert: !0, revertDuration: 0 })
+  });
+  var b = moment().startOf("day"),
+      c = b.format("YYYY-MM"),
+      d = b.clone().subtract(1, "day").format("YYYY-MM-DD"),
+      e = b.format("YYYY-MM-DD"),
+      f = b.clone().add(1, "day").format("YYYY-MM-DD");
+  a("#calendar").fullCalendar({
+      header: {
+          left: "prev,next today",
+          center: "title",
+          right: "month,agendaWeek,agendaDay,listWeek"
+      },
+      editable: !0,
+      eventLimit: !0,
+      droppable: !0,
+      drop: function() {
+          a("#drop-remove").is(":checked") && a(this).remove()
+      },
+      navLinks: !0,
+      events: [
+        {% for programme in programmes %}
+        {
+            title: "{{ programme.departement.nom }} : {{ programme.activite }}",
+            url: "{{ path('programme_edit', {'id': programme.id })}}",
+            start: "{{ programme.datedeb }}",
+            end: "{{ programme.datefin }}"
+        },
+        {% endfor %}
+    ]
+  })
+}
+(jQuery);
+</script>
+{% endblock %}
