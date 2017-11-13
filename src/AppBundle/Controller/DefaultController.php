@@ -75,9 +75,30 @@ class DefaultController extends Controller
     public function calendrierNontraiterAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
 
-        $programmes = $em->getRepository('AppBundle:Programme')->findTypeProgramme($fralg = 'A traiter');
-        $miniprogrammes = $em->getRepository('AppBundle:Programme')->findTypeProgrammeFiltre($flag = 'A traiter', 0, 10);
+        // Affectation de l'user en fonction de son statut
+        $roles[] = $user->getRoles();
+
+        if (($roles[0][0] === 'ROLE_DISTRICT') || ($roles[0][0] === 'ROLE_EREGIONALE')) {
+          //Recherche du district concerné
+          $gestionnaire = $em->getRepository('AppBundle:Gestionnaire')->findOneBy(array('user' => $user));
+          $district = $gestionnaire->getDepartement()->getId();
+
+          // Si region est différente de l'équipe nationale alors Accès non autorisé
+          if (($gestionnaire === NULL)) {
+            throw new AccessDeniedException();
+          }
+
+          $programmes = $em->getRepository('AppBundle:Programme')->findDepartementTypeProgramme($district, $fralg = 'A traiter');
+          $miniprogrammes = $em->getRepository('AppBundle:Programme')->findDepartementTypeProgrammeFiltre($district, $flag = 'A traiter', 0, 10);
+
+        }else {
+          $programmes = $em->getRepository('AppBundle:Programme')->findTypeProgramme($fralg = 'A traiter');
+          $miniprogrammes = $em->getRepository('AppBundle:Programme')->findTypeProgrammeFiltre($flag = 'A traiter', 0, 10);
+
+        }
+
 
         return $this->render('default/calendrier.html.twig', array(
               'programmes'  => $programmes,

@@ -276,4 +276,58 @@ class ProgrammeRepository extends \Doctrine\ORM\EntityRepository
          ;
          return $qb->getResult();
      }
+
+     /**
+      * Liste des programmes non traiter
+      *
+      * @author: Delrodie AMOIKON
+      * @version: v1.0
+      * @date: 11/11/2017 21:35
+      */
+     public function findDepartementTypeProgramme($departement, $flag)
+     {
+         $em = $this->getEntityManager();
+         $qb = $em->createQuery('
+                       SELECT p, d
+                       FROM AppBundle:Programme p
+                       LEFT JOIN p.departement d
+                       WHERE p.flag LIKE :flag
+                       AND p.departement = :departement
+                       ORDER BY p.datedeb ASC
+                 '  )
+                 ->setParameters(array(
+                    'flag'  => '%'.$flag.'%',
+                    'departement' => $departement,
+                 ));
+         ;
+         return $qb->getResult();
+     }
+
+     /**
+      * Liste des programmes non traiter lot de 10
+      *
+      * @author: Delrodie AMOIKON
+      * @version: v1.0
+      * @date: 11/11/2017 22:02
+      */
+     public function findDepartementTypeProgrammeFiltre($departement, $flag, $offset, $limit)
+     {
+         $em = $this->getEntityManager();
+         $qb = $em->createQuery('
+                       SELECT p, d
+                       FROM AppBundle:Programme p
+                       LEFT JOIN p.departement d
+                       WHERE p.flag LIKE :flag
+                       AND p.departement = :departement
+                       ORDER BY p.datedeb ASC
+                 '  )
+                 ->setFirstResult($offset)
+                 ->setMaxResults($limit)
+                 ->setParameters(array(
+                    'flag'  => '%'.$flag.'%',
+                    'departement' => $departement,
+                 ));
+         ;
+         return $qb->getResult();
+     }
 }

@@ -70,7 +70,7 @@
       events: [
         {% for programme in programmes %}
         {
-            title: "{{ programme.activite }}",
+            title: "{{ programme.departement.nom }} : {{ programme.activite }}",
             url: "{{ path('programme_edit', {'id': programme.id })}}",
             start: "{{ programme.datedeb }}",
             end: "{{ programme.datefin }}"

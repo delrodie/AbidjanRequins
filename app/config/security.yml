@@ -57,6 +57,7 @@ security:
         #- { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: ROLE_ADMIN }
-        - { path: ^/admin/user, role: ROLE_SUPER_ADMIN }
-        - { path: ^/admin/gestionnaire, role: ROLE_SUPER_ADMIN }
+        - { path: ^/admin/user/, role: ROLE_SUPER_ADMIN }
+        - { path: ^/admin/gestionnaire/, role: ROLE_SUPER_ADMIN }
+        - { path: ^/admin/departement/, role: ROLE_SUPER_ADMIN }
         - { path: ^/, role: ROLE_USER }
