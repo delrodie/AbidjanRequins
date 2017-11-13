@@ -23,6 +23,28 @@ class ProgrammeController extends Controller
     public function indexAction()
     {
         $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+
+        // Affectation de l'user en fonction de son statut
+        $roles[] = $user->getRoles();
+
+        // Sauvegarde du log de consultation
+        $notification = $this->get('monolog.logger.notification');
+        $notification->notice($user.' a consulté la liste des programmes provisoires .\n');
+
+        //Affection de l'utilisation selon son departement
+        if (($roles[0][0] === 'ROLE_DISTRICT') || ($roles[0][0] === 'ROLE_EREGIONALE')) {
+          //Recherche du district concerné
+          $gestionnaire = $em->getRepository('AppBundle:Gestionnaire')->findOneBy(array('user' => $user));
+          $departement = $gestionnaire->getDepartement()->getId();
+
+          $programmes = $em->getRepository('AppBundle:Programme')->findDepartementProgramme($departement);
+
+          return $this->render('programme/index.html.twig', array(
+              'programmes' => $programmes,
+          ));
+
+        }
 
         //$programmes = $em->getRepository('AppBundle:Programme')->findAll();
         $programmes = $em->getRepository('AppBundle:Programme')->findProgrammeAdmin();
@@ -40,8 +62,47 @@ class ProgrammeController extends Controller
      */
     public function newAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
         $programme = new Programme();
-        $form = $this->createForm('AppBundle\Form\ProgrammeType', $programme);
+        $user = $this->getUser();
+
+        // Affectation de l'user en fonction de son statut
+        $roles[] = $user->getRoles();
+
+        // Sauvegarde du log de consultation
+        $notification = $this->get('monolog.logger.notification');
+        $notification->notice($user.' a consulté le formulaire enregistrement de programmes .\n');
+
+        //Affection de l'utilisation selon son departement
+        if (($roles[0][0] === 'ROLE_DISTRICT') || ($roles[0][0] === 'ROLE_EREGIONALE')) {
+          //Recherche du district concerné
+          $gestionnaire = $em->getRepository('AppBundle:Gestionnaire')->findOneBy(array('user' => $user));
+          $departement = $gestionnaire->getDepartement()->getId();
+
+          $programmes = $em->getRepository('AppBundle:Programme')->findDepartementProgramme($departement);
+
+          $form = $this->createForm('AppBundle\Form\ProgrammeUserType', $programme, array('user' => $user));
+
+          $form->handleRequest($request);
+
+          if ($form->isSubmitted() && $form->isValid()) {
+              $em = $this->getDoctrine()->getManager();
+              $programme->setStatut(true);
+              $programme->setFlag('A traiter');//dump($programme);die();
+              $em->persist($programme);
+              $em->flush();
+
+              return $this->redirectToRoute('programme_index');
+          }
+
+          return $this->render('programme/newUser.html.twig', array(
+              'programme' => $programme,
+              'form' => $form->createView(),
+          ));
+
+        } else {
+          $form = $this->createForm('AppBundle\Form\ProgrammeType', $programme);
+        }
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -84,14 +145,44 @@ class ProgrammeController extends Controller
      */
     public function editAction(Request $request, Programme $programme)
     {
+        $em = $this->getDoctrine()->getManager();
+        $user = $this->getUser();
+
+        // Affectation de l'user en fonction de son statut
+        $roles[] = $user->getRoles();
         $deleteForm = $this->createDeleteForm($programme);
-        $editForm = $this->createForm('AppBundle\Form\ProgrammeType', $programme);
-        $editForm->handleRequest($request);
 
-        if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+        if  (($roles[0][0] === 'ROLE_DISTRICT') || ($roles[0][0] === 'ROLE_EREGIONALE'))  {
+          //Recherche du district concerné
+          $gestionnaire = $em->getRepository('AppBundle:Gestionnaire')->findOneBy(array('user' => $user));
+          $departement = $gestionnaire->getDepartement()->getId();
 
-            return $this->redirectToRoute('programme_index');
+          $programmes = $em->getRepository('AppBundle:Programme')->findDepartementProgramme($departement);
+
+          $editForm = $this->createForm('AppBundle\Form\ProgrammeUserType', $programme, array('user' => $user));
+          $editForm->handleRequest($request);
+
+          if ($editForm->isSubmitted() && $editForm->isValid()) {
+              $this->getDoctrine()->getManager()->flush();
+
+              return $this->redirectToRoute('programme_index');
+          }
+
+          return $this->render('programme/editUser.html.twig', array(
+              'programme' => $programme,
+              'edit_form' => $editForm->createView(),
+              'delete_form' => $deleteForm->createView(),
+          ));
+
+        }else {
+          $editForm = $this->createForm('AppBundle\Form\ProgrammeType', $programme);
+          $editForm->handleRequest($request);
+
+          if ($editForm->isSubmitted() && $editForm->isValid()) {
+              $this->getDoctrine()->getManager()->flush();
+
+              return $this->redirectToRoute('programme_index');
+          }
         }
 
         return $this->render('programme/edit.html.twig', array(

@@ -8,6 +8,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
+use Doctrine\ORM\QueryBuilder;
 
 class ProgrammeUserType extends AbstractType
 {
@@ -16,6 +20,10 @@ class ProgrammeUserType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $this->user = $options['user'];
+
+        $user = $this->user;
+
         $builder
             ->add('activite', TextType::class, array(
                   'attr'  => array(
@@ -29,6 +37,13 @@ class ProgrammeUserType extends AbstractType
                       'class' => 'form-control',
                       'autocomplete'  => 'off',
                       'data-error'  => "La cible doit être definie",
+                  )
+            ))
+            ->add('lieu', TextType::class, array(
+                  'attr'  => array(
+                      'class' => 'form-control',
+                      'autocomplete'  => 'off',
+                      'data-error'  => "Le lieu est obligatoire",
                   )
             ))
             ->add('objectif', null, array(
@@ -70,12 +85,17 @@ class ProgrammeUserType extends AbstractType
                   )
             ))*/
             //->add('slug')->add('publiePar')->add('modifiePar')->add('publieLe')->add('modifieLe')
-            ->add('departement', null, array(
+            ->add('departement', EntityType::class, array(
                   'attr'  => array(
                       'class' => 'form-control',
                       'autocomplete'  => 'off',
-                      'data-error'  => "Le department est obligatoire",
-                  )
+                      'data-error'  => "Le department ou district est obligatoire",
+                  ),
+                  'class' => 'AppBundle:Departement',
+                  'query_builder' =>  function(EntityRepository $er) use($user){
+                          return $er->getDepartementByUser($user);
+                    },
+                    'choice_label'  => 'nom',
             ))
             ;
     }
@@ -86,7 +106,8 @@ class ProgrammeUserType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\Programme'
+            'data_class' => 'AppBundle\Entity\Programme',
+            'user'      => null,
         ));
     }
 

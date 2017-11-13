@@ -6,12 +6,12 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Departement
+ * Gestionnaire
  *
- * @ORM\Table(name="departement")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\DepartementRepository")
+ * @ORM\Table(name="gestionnaire")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\GestionnaireRepository")
  */
-class Departement
+class Gestionnaire
 {
     /**
      * @var int
@@ -32,32 +32,29 @@ class Departement
     /**
      * @var string
      *
-     * @ORM\Column(name="couleur", type="string", length=255, nullable=true)
+     * @ORM\Column(name="prenoms", type="string", length=255)
      */
-    private $couleur;
+    private $prenoms;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="type", type="string", length=255, nullable=true)
+     * @ORM\Column(name="fonction", type="string", length=255, nullable=true)
      */
-    private $type;
-
-   /**
-   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Programme", mappedBy="departement")
-   */
-   private $programmes;
-
-   /**
-   * @ORM\OneToMany(targetEntity="AppBundle\Entity\Gestionnaire", mappedBy="departement")
-   */
-   private $gestionnaires;
+    private $fonction;
 
     /**
      * @var string
      *
-     * @Gedmo\Slug(fields={"nom"})
-     * @ORM\Column(name="slug", type="string", length=75)
+     * @ORM\Column(name="contact", type="string", length=255, nullable=true)
+     */
+    private $contact;
+
+    /**
+     * @var string
+     *
+     * @Gedmo\Slug(fields={"nom","prenoms","contact"})
+     * @ORM\Column(name="slug", type="string", length=255)
      */
     private $slug;
 
@@ -93,6 +90,17 @@ class Departement
      */
     private $modifieLe;
 
+    /**
+     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User")
+     */
+     private $user;
+
+    /**
+    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Departement", inversedBy="gestionnaires")
+    * @ORM\JoinColumn(name="departement_id", referencedColumnName="id")
+    */
+    private $departement;
+
 
     /**
      * Get id
@@ -109,7 +117,7 @@ class Departement
      *
      * @param string $nom
      *
-     * @return Departement
+     * @return Gestionnaire
      */
     public function setNom($nom)
     {
@@ -129,27 +137,75 @@ class Departement
     }
 
     /**
-     * Set couleur
+     * Set prenoms
      *
-     * @param string $couleur
+     * @param string $prenoms
      *
-     * @return Departement
+     * @return Gestionnaire
      */
-    public function setCouleur($couleur)
+    public function setPrenoms($prenoms)
     {
-        $this->couleur = $couleur;
+        $this->prenoms = $prenoms;
 
         return $this;
     }
 
     /**
-     * Get couleur
+     * Get prenoms
      *
      * @return string
      */
-    public function getCouleur()
+    public function getPrenoms()
     {
-        return $this->couleur;
+        return $this->prenoms;
+    }
+
+    /**
+     * Set fonction
+     *
+     * @param string $fonction
+     *
+     * @return Gestionnaire
+     */
+    public function setFonction($fonction)
+    {
+        $this->fonction = $fonction;
+
+        return $this;
+    }
+
+    /**
+     * Get fonction
+     *
+     * @return string
+     */
+    public function getFonction()
+    {
+        return $this->fonction;
+    }
+
+    /**
+     * Set contact
+     *
+     * @param string $contact
+     *
+     * @return Gestionnaire
+     */
+    public function setContact($contact)
+    {
+        $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * Get contact
+     *
+     * @return string
+     */
+    public function getContact()
+    {
+        return $this->contact;
     }
 
     /**
@@ -157,7 +213,7 @@ class Departement
      *
      * @param string $slug
      *
-     * @return Departement
+     * @return Gestionnaire
      */
     public function setSlug($slug)
     {
@@ -181,7 +237,7 @@ class Departement
      *
      * @param string $publiePar
      *
-     * @return Departement
+     * @return Gestionnaire
      */
     public function setPubliePar($publiePar)
     {
@@ -205,7 +261,7 @@ class Departement
      *
      * @param string $modifiePar
      *
-     * @return Departement
+     * @return Gestionnaire
      */
     public function setModifiePar($modifiePar)
     {
@@ -229,7 +285,7 @@ class Departement
      *
      * @param \DateTime $publieLe
      *
-     * @return Departement
+     * @return Gestionnaire
      */
     public function setPublieLe($publieLe)
     {
@@ -253,7 +309,7 @@ class Departement
      *
      * @param \DateTime $modifieLe
      *
-     * @return Departement
+     * @return Gestionnaire
      */
     public function setModifieLe($modifieLe)
     {
@@ -273,105 +329,50 @@ class Departement
     }
 
     /**
-     * Set type
+     * Set user
      *
-     * @param string $type
+     * @param \AppBundle\Entity\User $user
      *
-     * @return Departement
+     * @return Gestionnaire
      */
-    public function setType($type)
+    public function setUser(\AppBundle\Entity\User $user = null)
     {
-        $this->type = $type;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get type
+     * Get user
      *
-     * @return string
+     * @return \AppBundle\Entity\User
      */
-    public function getType()
+    public function getUser()
     {
-        return $this->type;
-    }
-
-    public function __toString() {
-        return $this->getNom();
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->programmes = new \Doctrine\Common\Collections\ArrayCollection();
+        return $this->user;
     }
 
     /**
-     * Add programme
+     * Set departement
      *
-     * @param \AppBundle\Entity\Programme $programme
+     * @param \AppBundle\Entity\Departement $departement
      *
-     * @return Departement
+     * @return Gestionnaire
      */
-    public function addProgramme(\AppBundle\Entity\Programme $programme)
+    public function setDepartement(\AppBundle\Entity\Departement $departement = null)
     {
-        $this->programmes[] = $programme;
+        $this->departement = $departement;
 
         return $this;
     }
 
     /**
-     * Remove programme
+     * Get departement
      *
-     * @param \AppBundle\Entity\Programme $programme
+     * @return \AppBundle\Entity\Departement
      */
-    public function removeProgramme(\AppBundle\Entity\Programme $programme)
+    public function getDepartement()
     {
-        $this->programmes->removeElement($programme);
-    }
-
-    /**
-     * Get programmes
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getProgrammes()
-    {
-        return $this->programmes;
-    }
-
-    /**
-     * Add gestionnaire
-     *
-     * @param \AppBundle\Entity\Gestionnaire $gestionnaire
-     *
-     * @return Departement
-     */
-    public function addGestionnaire(\AppBundle\Entity\Gestionnaire $gestionnaire)
-    {
-        $this->gestionnaires[] = $gestionnaire;
-
-        return $this;
-    }
-
-    /**
-     * Remove gestionnaire
-     *
-     * @param \AppBundle\Entity\Gestionnaire $gestionnaire
-     */
-    public function removeGestionnaire(\AppBundle\Entity\Gestionnaire $gestionnaire)
-    {
-        $this->gestionnaires->removeElement($gestionnaire);
-    }
-
-    /**
-     * Get gestionnaires
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getGestionnaires()
-    {
-        return $this->gestionnaires;
+        return $this->departement;
     }
 }

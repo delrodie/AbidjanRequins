@@ -10,23 +10,40 @@ namespace AppBundle\Repository;
  */
 class DepartementRepository extends \Doctrine\ORM\EntityRepository
 {
+
     /**
-     * Liste des departements par categorie
+     * Recherche du departement selon l'user
+     *
+     * @author: Delrodie AMOIKON
+     * @version: v1.0
+     * @version: 13/11/2017 19:07
+     */
+    public function getDepartementByUser($user)
+    {
+        return $qb = $this->createQueryBuilder('d')
+                   ->innerJoin('d.gestionnaires', 'g')
+                   ->innerJoin('g.user', 'u')
+                   ->where('u.id = :user')
+                   ->setParameter('user', $user);
+    }
+
+    /**
+     * Liste des departements par type
      *
      * @author: Delrodie AMOIKON
      * @version: v1.0
      * @since: 12/11/2017 12:10
      */
-    public function findListDistrict($categorie)
+    public function findListDistrict($type)
     {
         $em = $this->getEntityManager();
         return $qb = $em->createQuery('
                           SELECT d
                           FROM AppBundle:Departement d
-                          Where d.nom LIKE :categorie
+                          Where d.type LIKE :type
                           ORDER BY d.nom ASC
                       ')
-                      ->setParameter('categorie', '%'.$categorie.'%')
+                      ->setParameter('type', '%'.$type.'%')
                       ->getResult()
                       ;
     }
