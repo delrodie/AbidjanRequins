@@ -34,6 +34,11 @@ class DefaultController extends Controller
           $gestionnaire = $em->getRepository('AppBundle:Gestionnaire')->findOneBy(array('user' => $user));
           $district = $gestionnaire->getDepartement()->getId();
 
+          // Si region est différente de l'équipe nationale alors Accès non autorisé
+          if (($gestionnaire === NULL)) {
+            throw new AccessDeniedException();
+          }
+
           // liste de 15 activités du district
           $activites = $em->getRepository('AppBundle:Programme')->findDepartementActiviteLatest($district, $offset = 0, $limit = 10);
           // Statistiques acticvités
