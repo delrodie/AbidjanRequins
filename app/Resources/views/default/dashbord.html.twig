@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="row">
+          <div class="col-md-3 col-sm-4 col-md-offset-2">
+            <div class="widget widget-tile-1 m-b-30">
+              <div class="p-t-20 p-x-20">
+                <div class="wt-title">Totales activités</div>
+                <div class="wt-number">{{ activiteTotale }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-4">
+            <div class="widget widget-tile-1 m-b-30">
+              <div class="p-t-20 p-x-20">
+                <div class="wt-title">Activités des chefs</div>
+                <div class="wt-number">{{ activiteChef }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-3 col-sm-4">
+            <div class="widget widget-tile-1 m-b-30">
+              <div class="p-t-20 p-x-20">
+                <div class="wt-title"> Activités des jeunes</div>
+                <div class="wt-number">{{ activiteJeune }}</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="panel panel-default panel-table">
+              <div class="panel-heading">
+                <div class="panel-tools">
+                  <a href="{{ path('calendrier_non_traiter')}}">
+                    <button type="button" class="btn btn-default btn-labeled"><i class="zmdi zmdi-calendar zmdi-hc-lg"></i>
+                          <span class="btn-label btn-label-right">Calendrier</span>
+                    </button>
+                  </a>
+                  <a href="{{ path('programme_new')}}">
+                    <button type="button" class="btn btn-primary btn-labeled"><i class="zmdi zmdi-plus-square zmdi-hc-lg"></i>
+                          <span class="btn-label btn-label-right">Ajouter un nouveau programme</span>
+                    </button>
+                  </a>
+                </div>
+                <h3 class="panel-title">Nos activités</h3>
+                <div class="panel-subtitle">+</div>
+              </div>
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Periodes</th>
+                      <th>Departements</th>
+                      <th>Activités</th>
+                      <th>Cibles</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for activite in activites %}
+                    <tr>
+                      <td>
+                        {% if activite.datedeb == activite.datefin %}
+                            {{ activite.datedeb|date('d-m-Y') }}
+                        {% else %}
+                            {{ activite.datedeb|date('d-m') }} au {{ activite.datefin|date('d-m-Y') }}
+                        {% endif %}
+                      </td>
+                      <td><span style="color: #{{activite.departement.couleur}}">{{ activite.departement.nom|upper }}</span>  </td>
+                      <td>{{ activite.activite }}</td>
+                      <td>{{ activite.cible }}</td>
+                      <td>
+                        {% if activite.flag == 'Valider' %}
+                        <span class="label label-outline-success">{{ activite.flag }}</span>
+                        {% elseif activite.flag == 'A revoir'  %}
+                        <span class="label label-outline-warning">{{ activite.flag }}</span>
+                        {% else %}
+                        <span class="label label-outline-info">{{ activite.flag }}</span>
+                        {% endif %}
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('ressources/js/dashboard-3.min.js')}}"></script>
+{% endblock %}

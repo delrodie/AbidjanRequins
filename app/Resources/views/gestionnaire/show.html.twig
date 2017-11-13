@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Gestionnaire</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ gestionnaire.id }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ gestionnaire.nom }}</td>
+            </tr>
+            <tr>
+                <th>Prenoms</th>
+                <td>{{ gestionnaire.prenoms }}</td>
+            </tr>
+            <tr>
+                <th>Fonction</th>
+                <td>{{ gestionnaire.fonction }}</td>
+            </tr>
+            <tr>
+                <th>Contact</th>
+                <td>{{ gestionnaire.contact }}</td>
+            </tr>
+            <tr>
+                <th>Slug</th>
+                <td>{{ gestionnaire.slug }}</td>
+            </tr>
+            <tr>
+                <th>Publiepar</th>
+                <td>{{ gestionnaire.publiePar }}</td>
+            </tr>
+            <tr>
+                <th>Modifiepar</th>
+                <td>{{ gestionnaire.modifiePar }}</td>
+            </tr>
+            <tr>
+                <th>Publiele</th>
+                <td>{{ gestionnaire.publieLe }}</td>
+            </tr>
+            <tr>
+                <th>Modifiele</th>
+                <td>{{ gestionnaire.modifieLe }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('admin_gestionnaire_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('admin_gestionnaire_edit', { 'id': gestionnaire.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
+{% endblock %}

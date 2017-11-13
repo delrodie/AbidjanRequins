@@ -24,35 +24,43 @@ class UserType extends AbstractType
             ->add('username', TextType::class, array(
               'attr'  => array(
                   'class' => 'form-control',
-                  'autocomplete'  => 'off'
+                  'autocomplete'  => 'off',
+                  'data-error'  => "Le nom utilisateur est obligatoire",
               )
         ))
             //->add('usernameCanonical')
             ->add('email', EmailType::class, array(
               'attr'  => array(
                   'class' => 'form-control',
-                  'autocomplete'  => 'off'
+                  'autocomplete'  => 'off',
+                  'data-error'  => "L'adresse email est obligatoire",
               )
         ))
             //->add('emailCanonical')
-            ->add('enabled')
+            ->add('enabled', null, array(
+              'attr'  => array(
+                  'class' => 'custom-control-input',
+              )
+        ))
             //->add('salt')
             ->add('plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
                 'required' => $options['passwordRequired'],
-                'first_options'  => array('label' => 'Mot de passe'),
-                'second_options' => array('label' => 'Répétez le mot de passe'),
+                'first_options'  => array('label' => 'Mot de passe','attr'  => array(
+                    'class' => 'form-control',
+                )),
+                'second_options' => array('label' => 'Répétez le mot de passe','attr'  => array(
+                    'class' => 'form-control',
+                )),
+
             ))
             //->add('lastLogin')->add('confirmationToken')->add('passwordRequestedAt')
             ->add('roles', ChoiceType::class, array(
               'choices' => array(
-                'UTILISATEUR '  => 'ROLE_USER',
+                'DISTRICT '  => 'ROLE_DISTRICT',
+                'EQUIPE REGIONALE '  => 'ROLE_EREGIONALE',
                 'ADMINISTRATEUR '  => 'ROLE_ADMIN',
-              ),
-              'attr'  => array(
-                  'class' => 'form-control',
-                  'autocomplete'  => 'off'
               ),
               'multiple'  => true,
               'expanded'  => true

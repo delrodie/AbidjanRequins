@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="">
+    <title>Connexion</title>
+    <link rel="icon" type="image/png" href="{{ asset('ressources/img/logo.png')}}" sizes="32x32">
+    <link rel="icon" type="image/png" href="{{ asset('ressources/img/logo.png')}}" sizes="16x16">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('ressources/css/vendor.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('ressources/css/cosmos.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('ressources/css/application.min.css')}}">
+  </head>
+  <body class="authentication-body">
+    <div class="container-fluid">
+      <div class="authentication-header m-b-30">
+        <div class="clearfix">
+          <div class="pull-left">
+            <a class="authentication-logo" href="{{ path('homepage')}}">
+              <img src="{{ asset('ressources/img/logo.png')}}" alt="" height="25">
+              <span>Abidjan Requins</span>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4 col-sm-offset-4">
+          <div class="authentication-content m-b-30">
+            <h3 class="m-t-0 m-b-30 text-center">Bonjour chef(fe)</h3>
+            {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+                <a href="{{ path('fos_user_security_logout') }}">
+                    {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                </a>
+            {% endif %}
+            {% if app.request.hasPreviousSession %}
+                {% for type, messages in app.session.flashbag.all() %}
+                    {% for message in messages %}
+                        <div class="flash-{{ type }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+            <div>
+                {% block fos_user_content %}
+                {% endblock fos_user_content %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="authentication-footer">
+        <span class="text-muted">Besoin d'aide? infos@scoutascci.org</span>
+      </div>
+    </div>
+    {% block javascripts %}
+    <script src="{{ asset('ressources/js/vendor.min.js')}}"></script>
+    <script src="{{ asset('ressources/js/cosmos.min.js')}}"></script>
+    <script src="{{ asset('ressources/js/application.min.js')}}"></script>
+    {% endblock %}
+  </body>
+
+</html>

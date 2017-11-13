@@ -149,3 +149,20 @@ ivory_ck_editor:
         filebrowsers:
             - filebrowserImageBrowse
             - filebrowserImageUpload
+
+services:
+    json:
+        #class: Monolog\Formatter\WildfireFormatter
+        #class: Monolog\Formatter\HtmlFormatter
+        class: Monolog\Formatter\JsonFormatter
+
+monolog:
+    channels: [notification]
+    handlers:
+        notification:
+            level: notice
+            type:  stream
+            #path:  '%kernel.logs_dir%/../../web/ressources/js/notification.json'
+            path:  '%kernel.logs_dir%/../../app/Resources/views/default/log.html.twig'
+            #formatter: json
+            channels: [notification]

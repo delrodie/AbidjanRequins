@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enregistrement des departements{% endblock %}
+
+{% block body %}
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="pull-right">
+          <a href="{{ path('programme_index') }}">
+            <button type="button" class="btn btn-primary btn-labeled"><i class="zmdi zmdi-assignment-o zmdi-hc-lg"></i>
+                  <span class="btn-label btn-label-right">Liste des programmes</span>
+            </button>
+          </a>
+        </div>
+          <h3 class="m-y-0">Enregistrement</h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+            {{ form_start(form, {'attr': {'data-toggle': 'validator'}} )}}
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="" class="control-label">Departement </label>
+                      {{ form_widget(form.departement)}}
+                      {{ form_errors(form.departement)}}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="" class="control-label">Activité</label>
+                      {{ form_widget(form.activite)}}
+                      {{ form_errors(form.activite)}}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="" class="control-label">Lieu</label>
+                      {{ form_widget(form.lieu)}}
+                      {{ form_errors(form.lieu)}}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="" class="control-label">Cible</label>
+                      {{ form_widget(form.cible)}}
+                      {{ form_errors(form.cible)}}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group" id="sandbox-container">
+                      <label for="" class="control-label">Debut période</label>
+                      {{ form_widget(form.datedeb)}}
+                      {{ form_errors(form.datedeb)}}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group" id="sandbox-container">
+                      <label for="" class="control-label">Fin période</label>
+                      {{ form_widget(form.datefin)}}
+                      {{ form_errors(form.datefin)}}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="" class="control-label">Objectif</label>
+                      {{ form_widget(form.objectif)}}
+                      {{ form_errors(form.objectif)}}
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                </div>
+
+                {{ form_widget(form) }}
+                <div class="col-sm-6 col-md-4 col-sm-offset-6 col-md-offset-8">
+                  <input type="submit" class="btn btn-primary btn-block" value="Enregistrer" />
+                </div>
+            {{ form_end(form) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link href="{{ asset('ressources/datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('ressources/datepicker/js/bootstrap-datepicker.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('ressources/datepicker/locales/bootstrap-datepicker.fr.min.js') }}" type="text/javascript">
+</script>
+<script>
+		    $('#sandbox-container input').datepicker({
+		            format: "yyyy-mm-dd",
+				    todayBtn: "linked",
+				    clearBtn: true,
+				    language: "fr",
+				    multidate: false,
+				    autoclose: true
+		    });
+	</script>
+{% endblock %}

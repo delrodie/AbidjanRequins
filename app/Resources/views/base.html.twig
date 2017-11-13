@@ -1,13 +1,350 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-    <body>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="">
+    <title>{% block title %}Plateforme de Gestion de la région d'Abidjan{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{{ asset('ressources/img/logo.png')}}" sizes="32x32">
+    <link rel="icon" type="image/png" href="{{ asset('ressources/img/logo.png')}}" sizes="16x16">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700" rel="stylesheet">
+    {% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('ressources/css/vendor.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('ressources/css/cosmos.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('ressources/css/application.min.css')}}">
+    {% endblock %}
+  </head>
+  <body class="layout layout-header-fixed layout-left-sidebar-fixed">
+    <div class="site-overlay"></div>
+    <div class="site-header">
+      <nav class="navbar navbar-default">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{{ path('homepage')}}">
+            <img src="{{ asset('ressources/img/logo.png')}}" alt="" height="25">
+            <span>Abidjan Requins</span>
+          </a>
+          <button class="navbar-toggler left-sidebar-toggle pull-left visible-xs" type="button">
+            <span class="hamburger"></span>
+          </button>
+          <button class="navbar-toggler pull-right visible-xs-block" type="button" data-toggle="collapse" data-target="#navbar">
+            <span class="more"></span>
+          </button>
+        </div>
+        <div class="navbar-collapsible">
+          <div id="navbar" class="navbar-collapse collapse">
+            <button class="navbar-toggler left-sidebar-collapse pull-left hidden-xs" type="button">
+              <span class="hamburger"></span>
+            </button>
+            <ul class="nav navbar-nav">
+              <li class="visible-xs-block">
+                <div class="nav-avatar">
+                  <img class="img-circle" src="{{ asset('ressources/img/avatars/avatar.png')}}" alt="" width="48" height="48">
+                </div>
+              {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    <h4 class="navbar-text text-center">
+                      {{ 'layout.user'|trans({'%username%': app.user.username}, 'FOSUserBundle')|title }}
+                    </h4>
+                {% else %}
+                    <h4 class="navbar-text text-center">
+                      <a href="{{ path('fos_user_security_login') }}" title="Connecte-toi" style="color: white;">Anonyme</a>
+                    </h4>
+                {% endif %}
+
+              </li>
+            </ul>
+            <form class="navbar-form navbar-left">
+              <div class="navbar-search-group">
+                <input type="text" class="form-control" placeholder="Recherche">
+                <button type="submit" class="btn btn-default">
+                  <i class="zmdi zmdi-search"></i>
+                </button>
+              </div>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+              <li class="nav-table dropdown visible-xs-block">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  <span class="nav-cell nav-icon">
+                    <i class="zmdi zmdi-account-o"></i>
+                  </span>
+                  <span class="hidden-md-up m-l-15">Compte</span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">Profile</a></li>
+                  <li><a href="#">Parametrage</a></li>
+                  <li><a href="#">Aide</a></li>
+                  <li role="separator" class="divider"></li>
+                  <li><a href="#">Deconnexion</a></li>
+                </ul>
+              </li>
+              <li class="nav-table dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  <span class="nav-cell nav-icon">
+                    <i class="zmdi zmdi-apps"></i>
+                  </span>
+                  <span class="hidden-md-up m-l-15">Applications</span>
+                </a>
+                <div class="dropdown-menu dropdown-apps custom-dropdown">
+                  <div class="a-area">
+                    <div class="row gutter-xs">
+                      <div class="col-xs-4">
+                        <div class="a-item">
+                          <a href="#">
+                            <div class="ai-icon">
+                              <i class="zmdi zmdi-email zmdi-hc-3x"></i>
+                            </div>
+                            <div class="ai-title">Email</div>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="col-xs-4">
+                        <div class="a-item">
+                          <a href="#">
+                            <div class="ai-icon">
+                              <img class="img-responsive" src="{{ asset('ressources/img/omms.png')}}" alt="">
+                            </div>
+                            <div class="ai-title">Scout.org</div>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="col-xs-4">
+                        <div class="a-item">
+                          <a href="#">
+                            <div class="ai-icon">
+                              <i class="zmdi zmdi-facebook-box zmdi-hc-3x"></i>
+                            </div>
+                            <div class="ai-title">Facebook</div>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="col-xs-4">
+                        <div class="a-item">
+                          <a href="#">
+                            <div class="ai-icon">
+                              <i class="zmdi zmdi-instagram zmdi-hc-3x"></i>
+                            </div>
+                            <div class="ai-title">Instagram</div>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="col-xs-4">
+                        <div class="a-item">
+                          <a href="#">
+                            <div class="ai-icon">
+                              <i class="zmdi zmdi-twitter-box zmdi-hc-3x"></i>
+                            </div>
+                            <div class="ai-title">Twitter</div>
+                          </a>
+                        </div>
+                      </div>
+                      <div class="col-xs-4">
+                        <div class="a-item">
+                          <a href="#">
+                            <div class="ai-icon">
+                              <i class="zmdi zmdi-youtube zmdi-hc-3x"></i>
+                            </div>
+                            <div class="ai-title">Youtube</div>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+              <li class="nav-table dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  <span class="nav-cell nav-icon">
+                    <i class="zmdi zmdi-notifications-none"></i>
+                  </span>
+                  <span class="hidden-md-up m-l-15">Notifications</span>
+                  <!--<span class="label label-success">3</span>-->
+                </a>
+                <div class="dropdown-menu custom-dropdown dropdown-notifications dropdown-menu-right">
+                  <div class="dropdown-header">
+                    <span>Notifications</span>
+                  </div>
+                  <!--<div class="n-items">
+                    <div class="custom-scrollbar">
+                      <div class="n-item">
+                        <div class="ni-img">
+                          <img class="img-circle" src="img/avatars/avatar.png" alt="" width="40" height="40">
+                        </div>
+                        <div class="ni-text"><a href="#">John Doe</a> is now following <a href="#">Kate Morris</a>.</div>
+                        <div class="ni-time">10 min</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dropdown-footer">
+                    <a href="#">View all notifications</a>
+                  </div>-->
+                </div>
+              </li>
+              <li class="nav-table dropdown hidden-sm-down">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                  <span class="nav-cell p-r-10">
+                    <img class="img-circle" src="{{ asset('ressources/img/avatars/avatar.png')}}" alt="" width="32" height="32">
+                  </span>
+                  {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                  <span class="nav-cell">
+                    {{ 'layout.user'|trans({'%username%': app.user.username}, 'FOSUserBundle')|title }}
+                    <span class="caret"></span>
+                  </span>
+                  {% else %}
+                  <span class="nav-cell">
+                    <a href="{{ path('fos_user_security_login') }}" title="Connecte-toi" style="color: white;">Anonyme</a>
+                    <span class="caret"></span>
+                  </span>
+                  {% endif %}
+
+                </a>
+                <ul class="dropdown-menu">
+                  <li>
+                    <a href="#">
+                      <i class="zmdi zmdi-account-o m-r-10"></i> Profile</a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i class="zmdi zmdi-settings m-r-10"></i> Parametrage</a>
+                  </li>
+                  <li>
+                    <a href="#">
+                      <i class="zmdi zmdi-help-outline m-r-10"></i> Aide</a>
+                  </li>
+                  <li role="separator" class="divider"></li>
+                  <li>
+                    <a href="#">
+                      <i class="zmdi zmdi-power m-r-10"></i> Deconnexion</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </div>
+    <div class="site-main">
+      <div class="site-left-sidebar">
+        <div class="sidebar-backdrop"></div>
+        <div class="custom-scrollbar">
+          <ul class="sidebar-menu">
+            <li class="menu-title">Accueil</li>
+            <li class="with-sub">
+              <a href="#" aria-haspopup="true">
+                <span class="menu-icon">
+                  <i class="zmdi zmdi-home"></i>
+                </span>
+                <span class="menu-text">Tableau de bord</span>
+              </a>
+              <ul class="sidebar-submenu collapse">
+                <li class="menu-subtitle">Dashboards</li>
+                <li><a href="{{ path('calendrier_valider')}}">Calendrier</a></li>
+                <li><a href="#">Statistiques</a></li>
+              </ul>
+            </li>
+            <li class="menu-title">Gestion</li>
+            <li>
+              <a href="widgets.html">
+                <!--<span class="badge badge-success">27</span>-->
+                <span class="menu-icon">
+                  <i class="zmdi zmdi-account"></i>
+                </span>
+                <span class="menu-text">Identification</span>
+              </a>
+            </li>
+            <li class="with-sub">
+              <a href="#" aria-haspopup="true">
+                <span class="menu-icon">
+                  <i class="zmdi zmdi-calendar"></i>
+                </span>
+                <span class="menu-text">Programmes</span>
+              </a>
+              <ul class="sidebar-submenu collapse">
+                <li class="menu-subtitle">Programmes</li>
+                <li><a href="#">Groupe</a></li>
+                <li><a href="{{ path('programme_index')}}">District</a></li>
+                <li><a href="{{ path('programme_index')}}">Région</a></li>
+              </ul>
+            </li>
+            <li class="with-sub">
+              <a href="#" aria-haspopup="true">
+                <span class="menu-icon">
+                  <i class="zmdi zmdi-accounts"></i>
+                </span>
+                <span class="menu-text">Equipes</span>
+              </a>
+              <ul class="sidebar-submenu collapse">
+                <li class="menu-subtitle">Equipes</li>
+                <li><a href="#">Groupe</a></li>
+                <li><a href="#">Districts</a></li>
+                <li><a href="#">Region</a></li>
+              </ul>
+            </li>
+            <li class="with-sub">
+              <a href="#" aria-haspopup="true">
+                <span class="menu-icon">
+                  <i class="zmdi zmdi-border-all"></i>
+                </span>
+                <span class="menu-text">Activités</span>
+              </a>
+              <ul class="sidebar-submenu collapse">
+                <li class="menu-subtitle">Activités</li>
+                <li><a href="#">Liste de présence</a></li>
+                <li><a href="#">Rapports</a></li>
+              </ul>
+            </li>
+            <li class="menu-title">Administration</li>
+            <li>
+              <a href="#">
+                <span class="menu-icon">
+                  <i class="zmdi zmdi-calendar-check"></i>
+                </span>
+                <span class="menu-text">Année</span>
+              </a>
+            </li>
+            <li>
+              <a href="#">
+                <span class="menu-icon">
+                  <i class="zmdi zmdi-landscape"></i>
+                </span>
+                <span class="menu-text">Districts</span>
+              </a>
+            </li>
+            <li>
+              <a href="{{ path('admin_departement_index')}}">
+                <span class="menu-icon">
+                  <i class="zmdi zmdi-landscape"></i>
+                </span>
+                <span class="menu-text">Departements</span>
+              </a>
+            </li>
+            <li class="with-sub">
+              <a href="#" aria-haspopup="true">
+                <span class="menu-icon">
+                  <i class="zmdi zmdi-lock"></i>
+                </span>
+                <span class="menu-text">Securité</span>
+              </a>
+              <ul class="sidebar-submenu collapse">
+                <li class="menu-subtitle">Sécurité</li>
+                <li><a href="{{ path('admin_user_index')}}">User</a></li>
+                <li><a href="{{ path('admin_gestionnaire_index')}}">Gestionnaire</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="site-content">
         {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+      </div>
+      <div class="site-footer">
+        2017 © Abidjan Requins - Departement Administration
+      </div>
+    </div>
+    {% block javascripts %}
+    <script src="{{ asset('ressources/js/vendor.min.js')}}"></script>
+    <script src="{{ asset('ressources/js/cosmos.min.js')}}"></script>
+    <script src="{{ asset('ressources/js/application.min.js')}}"></script>
+    {% endblock %}
+  </body>
 </html>

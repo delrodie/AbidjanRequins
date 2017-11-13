@@ -1,0 +1,77 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des programmes{% endblock %}
+
+{% block body %}
+
+
+<div class="panel panel-default panel-table">
+      <div class="panel-heading">
+        <div class="pull-right">
+          <a href="{{ path('programme_new') }}">
+            <button type="button" class="btn btn-primary btn-labeled"><i class="zmdi zmdi-plus-square zmdi-hc-lg"></i>
+                  <span class="btn-label btn-label-right">Ajouter un nouveau programme</span>
+            </button>
+          </a>
+        </div>
+        <h3 class="m-t-0 m-b-5">Listes des programmes</h3>
+      </div>
+      <div class="panel-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered dataTable" id="table-2">
+            <thead>
+              <tr>
+                <th class="text-center">Id</th>
+                <th class="text-center">Departements</th>
+                <th class="text-center">Periodes</th>
+                <th class="text-center">Activités</th>
+                <th class="text-center">Lieux</th>
+                <th class="text-center">Cibles</th>
+                <th class="text-center">Objectifs</th>
+                <th class="text-center">Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for programme in programmes %}
+                  <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ programme.departement.nom|upper }}</td>
+                      <td>
+                        <a href="{{ path('programme_edit', { 'id': programme.id }) }}">
+                        {% if programme.datedeb == programme.datefin %}
+                            {{ programme.datedeb|date('d-m-Y') }}
+                        {% else %}
+                            {{ programme.datedeb|date('d-m-Y') }} au {{ programme.datefin|date('d-m-Y')  }}
+                        {% endif %}
+                      </a>
+                      </td>
+                      <td>{{ programme.activite }}</td>
+                      <td>{{ programme.lieu }}</td>
+                      <td>{{ programme.cible }}</td>
+                      <td>{{ programme.objectif }}</td>
+                      <td class="text-center">
+                        {% if programme.flag %}
+                          {% if programme.flag == 'Valider' %}
+                          <span class="label label-outline-success">{{ programme.flag }}</span>
+                          {% elseif programme.flag == 'A revoir' %}
+                          <span class="label label-outline-warning">{{ programme.flag }}</span>
+                          {% else %}
+                          <span class="label label-outline-info">{{ programme.flag }}</span>
+                          {% endif %}
+                        {% else %}
+                            <span>Encours...</span>
+                        {% endif %}
+                      </td>
+                  </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('ressources/js/tables-datatables.min.js')}}"></script>
+{% endblock %}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="">
+    <title>Oups!!! page introuvable</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.html">
+    <link rel="icon" type="image/png" href="{{ asset('ressources/img/logo.png')}}" sizes="32x32">
+    <link rel="icon" type="image/png" href="{{ asset('ressources/img/logo.png')}}" sizes="16x16">
+    <link rel="manifest" href="#">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('ressources/css/vendor.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('ressources/css/cosmos.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('ressources/css/application.min.css')}}">
+  </head>
+  <body class="error-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6 col-sm-offset-3">
+          <div class="error">
+            <div class="e-icon text-warning">
+              <i class="zmdi zmdi-alert-circle-o"></i>
+            </div>
+            <h1>500</h1>
+            <h2>Erreurs serveurs</h2>
+            <div class="e-text">Nous sommes desolés, nous marquons automatiquement ces erreurs. <br>
+            Mais si ce problème persiste alors veuillez <br>
+            <a href="#"><span class="text-primary">nous contacter.</span></a>
+            <br></div>
+            <a href="{{ path('homepage')}}" class="btn btn-warning btn-lg">Retour à l'accueil</a>
+            <div class="e-social">
+              <a href="#">
+                <i class="zmdi zmdi-facebook"></i>
+              </a>
+              <a href="#">
+                <i class="zmdi zmdi-twitter"></i>
+              </a>
+              <a href="#">
+                <i class="zmdi zmdi-youtube"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="{{ asset('ressources/js/vendor.min.js')}}"></script>
+    <script src="{{ asset('ressources/js/cosmos.min.js')}}"></script>
+    <script src="{{ asset('ressources/js/application.min.js')}}"></script>
+  </body>
+
+</html>
