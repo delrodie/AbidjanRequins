@@ -92,7 +92,7 @@ class UserController extends Controller
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
+            $this->getDoctrine()->getManager()->flush();dump($user);die();
 
             return $this->redirectToRoute('admin_user_index');
         }

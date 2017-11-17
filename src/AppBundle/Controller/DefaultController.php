@@ -94,7 +94,7 @@ class DefaultController extends Controller
           $miniprogrammes = $em->getRepository('AppBundle:Programme')->findDepartementTypeProgrammeFiltre($district, $flag = 'A traiter', 0, 10);
 
         }else {
-          $programmes = $em->getRepository('AppBundle:Programme')->findTypeProgramme($fralg = 'A traiter');
+          $programmes = $em->getRepository('AppBundle:Programme')->findTypeProgramme($flag = 'A traiter');
           $miniprogrammes = $em->getRepository('AppBundle:Programme')->findTypeProgrammeFiltre($flag = 'A traiter', 0, 10);
 
         }
