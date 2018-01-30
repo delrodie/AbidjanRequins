@@ -8,9 +8,11 @@
       <div class="panel-heading">
         <div class="pull-right">
           <a href="{{ path('programme_index') }}">
-            <button type="button" class="btn btn-primary btn-labeled"><i class="zmdi zmdi-assignment-o zmdi-hc-lg"></i>
-                  <span class="btn-label btn-label-right">Liste des programmes</span>
+            {{ form_start(delete_form) }}
+            <button type="submit" class="btn btn-danger btn-labeled" onclick="return(confirm('Etes-vous sûr de vouloir supprimer ce programme'));"><i class="zmdi zmdi-delete zmdi-hc-lg"></i>
+                  <span class="btn-label btn-label-right">Supprimer le programme</span>
             </button>
+            {{ form_end(delete_form) }}
           </a>
         </div>
           <h3 class="m-y-0">Modification</h3>
