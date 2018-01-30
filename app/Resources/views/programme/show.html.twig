@@ -1,72 +1,116 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}{{ programme.departement }} : {{ programme.activite }}{% endblock %}
+
 {% block body %}
-    <h1>Programme</h1>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ programme.id }}</td>
-            </tr>
-            <tr>
-                <th>Activite</th>
-                <td>{{ programme.activite }}</td>
-            </tr>
-            <tr>
-                <th>Cible</th>
-                <td>{{ programme.cible }}</td>
-            </tr>
-            <tr>
-                <th>Objectif</th>
-                <td>{{ programme.objectif }}</td>
-            </tr>
-            <tr>
-                <th>Periode</th>
-                <td>{{ programme.periode }}</td>
-            </tr>
-            <tr>
-                <th>Flag</th>
-                <td>{{ programme.flag }}</td>
-            </tr>
-            <tr>
-                <th>Statut</th>
-                <td>{% if programme.statut %}Yes{% else %}No{% endif %}</td>
-            </tr>
-            <tr>
-                <th>Slug</th>
-                <td>{{ programme.slug }}</td>
-            </tr>
-            <tr>
-                <th>Publiepar</th>
-                <td>{{ programme.publiePar }}</td>
-            </tr>
-            <tr>
-                <th>Modifiepar</th>
-                <td>{{ programme.modifiePar }}</td>
-            </tr>
-            <tr>
-                <th>Publiele</th>
-                <td>{{ programme.publieLe }}</td>
-            </tr>
-            <tr>
-                <th>Modifiele</th>
-                <td>{{ programme.modifieLe }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <div class="pull-right">
+          <a href="{{ path('programme_region') }}">
+            <button type="button" class="btn btn-success btn-labeled"><i class="zmdi zmdi-assignment-o zmdi-hc-lg"></i>
+                  <span class="btn-label btn-label-right">Programmes de la région</span>
+            </button>
+          </a>
+          <a href="{{ path('programme_district') }}">
+            <button type="button" class="btn btn-primary btn-labeled"><i class="zmdi zmdi-assignment-o zmdi-hc-lg"></i>
+                  <span class="btn-label btn-label-right">Programmes des districts</span>
+            </button>
+          </a>
+        </div>
+          <h3 class="m-y-0">{{programme.activite  }}</h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
 
-    <ul>
-        <li>
-            <a href="{{ path('programme_index') }}">Back to the list</a>
-        </li>
-        <li>
-            <a href="{{ path('programme_edit', { 'id': programme.id }) }}">Edit</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="" class="control-label">Departement </label>
+                      <span style:"color: blue">
+                      <input type="text" value="{{ programme.departement }}" class="form-control" readonly>                        
+                      </span>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="" class="control-label">Activité</label>
+                      <input type="text" value="{{ programme.activite }}" class="form-control" readonly>                      
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="" class="control-label">Lieu</label>
+                      <input type="text" value="{{ programme.lieu }}" class="form-control" readonly>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="" class="control-label">Cible</label>
+                      <input type="text" value="{{ programme.cible }}" class="form-control" readonly>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="" class="control-label">Debut période</label>
+                      <input type="text" value="{{ programme.datedeb|date('d-m-Y') }}" class="form-control" readonly>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="" class="control-label">Fin période</label>
+                      <input type="text" value="{{ programme.datefin|date('d-m-Y') }}" class="form-control" readonly>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="form-group">
+                      <label for="" class="control-label">Objectif</label>
+                      <textarea class="form-control" readonly>{{ programme.objectif }}</textarea>
+                      <div class="help-block with-errors"></div>
+                    </div>
+                  </div>
+                </div>
+                  </div>
+                </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link href="{{ asset('ressources/datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+<script src="{{ asset('ressources/datepicker/js/bootstrap-datepicker.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('ressources/datepicker/locales/bootstrap-datepicker.fr.min.js') }}" type="text/javascript">
+</script>
+<script>
+		    $('#sandbox-container input').datepicker({
+		            format: "yyyy-mm-dd",
+				    todayBtn: "linked",
+				    clearBtn: true,
+				    language: "fr",
+				    multidate: false,
+				    autoclose: true
+		    });
+	</script>
 {% endblock %}

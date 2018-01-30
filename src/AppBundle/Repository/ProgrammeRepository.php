@@ -27,9 +27,13 @@ class ProgrammeRepository extends \Doctrine\ORM\EntityRepository
                       FROM AppBundle:Programme p
                       LEFT JOIN p.departement d
                       WHERE p.datedeb >= :date
+                      AND p.flag LIKE :flag
                       ORDER BY p.datedeb ASC
                 '  )
-                ->setParameter('date', date('Y-m-d', time()));
+                ->setParameters(array(
+                    'date' => date('Y-m-d', time()),
+                    'flag'  => '%valider%',
+                ));
         ;
         return $qb->getResult();
     }
@@ -117,6 +121,8 @@ class ProgrammeRepository extends \Doctrine\ORM\EntityRepository
         $qb = $this->createQueryBuilder('p')
                    ->select('count(p.id)')
                    ->where('p.statut = 1')
+                   ->andWhere('p.flag LIKE :flag')
+                   ->setParameter('flag', '%valider%')
                    ->getQuery()->getSingleScalarResult();
         ;
 
@@ -143,6 +149,7 @@ class ProgrammeRepository extends \Doctrine\ORM\EntityRepository
                        OR p.cible LIKE :chemin
                        OR p.cible LIKE :rout
                      ')
+                    ->andWhere('p.cible LIKE :flag')
                    ->setParameters(array(
                        'scout' => '%scout%',
                        'jeune'  => '%jeune%',
@@ -150,6 +157,7 @@ class ProgrammeRepository extends \Doctrine\ORM\EntityRepository
                        'eclair'  => '%eclair%',
                        'chemin'  => '%chemin%',
                        'rout'  => '%rout%',
+                       'flag'   => '%valider%',
                    ))
                    ->getQuery()->getSingleScalarResult();
         ;
@@ -267,11 +275,13 @@ class ProgrammeRepository extends \Doctrine\ORM\EntityRepository
                        LEFT JOIN p.departement d
                        WHERE p.datedeb >= :date
                        AND p.departement = :departement
+                       AND p.flag <> :flag
                        ORDER BY p.datedeb ASC
                  '  )
                  ->setParameters(array(
                     'date'  => date('Y-m-d', time()),
                     'departement' => $departement,
+                    'flag' => 'valider',
                  ));
          ;
          return $qb->getResult();
@@ -293,11 +303,13 @@ class ProgrammeRepository extends \Doctrine\ORM\EntityRepository
                        LEFT JOIN p.departement d
                        WHERE p.flag LIKE :flag
                        AND p.departement = :departement
+                       AND p.datedeb >= :date
                        ORDER BY p.datedeb ASC
                  '  )
                  ->setParameters(array(
                     'flag'  => '%'.$flag.'%',
                     'departement' => $departement,
+                    'date'  => date('Y-m-d', time()),
                  ));
          ;
          return $qb->getResult();
@@ -319,6 +331,7 @@ class ProgrammeRepository extends \Doctrine\ORM\EntityRepository
                        LEFT JOIN p.departement d
                        WHERE p.flag LIKE :flag
                        AND p.departement = :departement
+                       AND p.datedeb >= :date
                        ORDER BY p.datedeb ASC
                  '  )
                  ->setFirstResult($offset)
@@ -326,6 +339,64 @@ class ProgrammeRepository extends \Doctrine\ORM\EntityRepository
                  ->setParameters(array(
                     'flag'  => '%'.$flag.'%',
                     'departement' => $departement,
+                    'date'  => date('Y-m-d', time()),
+                 ));
+         ;
+         return $qb->getResult();
+     }
+
+     /**
+      * Liste des programmes traites
+      *
+      * @author: Delrodie AMOIKON
+      * @version: v1.0
+      * @date: 11/11/2017 21:35
+      */
+     public function findProgrammeFinal($type, $flag)
+     {
+         $em = $this->getEntityManager();
+         $qb = $em->createQuery('
+                       SELECT p, d
+                       FROM AppBundle:Programme p
+                       LEFT JOIN p.departement d
+                       WHERE p.flag LIKE :flag
+                       AND d.type LIKE :type
+                       ORDER BY p.datedeb ASC
+                 '  )
+                 ->setParameters(array(
+                    'flag'  => '%'.$flag.'%',
+                    'type' => '%'.$type.'%',
+                 ));
+         ;
+         return $qb->getResult();
+     }
+
+     /**
+      * verification de la date d'enegistrement
+      *
+      * @author: Delrodie AMOIKON
+      * @version: v1.1
+      * @date: 30/01/2018 06:21
+      */
+     public function verifProgrammeFinal($type, $flag, $debut, $fin)
+     {
+         $em = $this->getEntityManager();
+         $qb = $em->createQuery('
+                       SELECT p, d
+                       FROM AppBundle:Programme p
+                       LEFT JOIN p.departement d
+                       WHERE p.flag LIKE :flag
+                       AND d.type LIKE :type
+                       AND ((p.datedeb <= :debut AND p.datefin >= :debut)
+                       OR (p.datedeb >= :debut AND p.datedeb <= :fin)
+                       OR (p.datefin >= :debut AND p.datefin <= :fin))
+                       ORDER BY p.datedeb ASC
+                 '  )
+                 ->setParameters(array(
+                    'flag'  => '%'.$flag.'%',
+                    'type' => '%'.$type.'%',
+                    'debut'  => $debut,
+                    'fin'  => $fin,
                  ));
          ;
          return $qb->getResult();

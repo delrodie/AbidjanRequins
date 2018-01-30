@@ -21,7 +21,7 @@
         <div id="external-events">
           {% for miniprogramme in miniprogrammes %}
           <div class="fc-event mb-0-5" style="background-color: #{{ miniprogramme.departement.couleur}};">
-            <a href="{{ path('programme_edit', {'id': miniprogramme.id })}}" style="color: white;" target="_blank">
+            <a href="{{ path('programme_show', {'slug': miniprogramme.slug })}}" style="color: white;" target="_blank">
               {% if miniprogramme.datedeb == miniprogramme.datefin %}
                   {{ miniprogramme.datedeb|date('d-m-Y')}}
               {% else %}
@@ -71,7 +71,7 @@
         {% for programme in programmes %}
         {
             title: "{{ programme.departement.nom }} : {{ programme.activite }}",
-            url: "{{ path('programme_edit', {'id': programme.id })}}",
+            url: "{{ path('programme_show', {'slug': programme.slug })}}",
             start: "{{ programme.datedeb }}",
             end: "{{ programme.datefin }}"
         },

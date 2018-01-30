@@ -38,7 +38,7 @@ class ProgrammeController extends Controller
           $gestionnaire = $em->getRepository('AppBundle:Gestionnaire')->findOneBy(array('user' => $user));
           $departement = $gestionnaire->getDepartement()->getId();
 
-          $programmes = $em->getRepository('AppBundle:Programme')->findDepartementProgramme($departement);
+          $programmes = $em->getRepository('AppBundle:Programme')->findDepartementTypeProgramme($departement, $flag = 'traite');
 
           return $this->render('programme/index.html.twig', array(
               'programmes' => $programmes,
@@ -47,7 +47,7 @@ class ProgrammeController extends Controller
         }
 
         //$programmes = $em->getRepository('AppBundle:Programme')->findAll();
-        $programmes = $em->getRepository('AppBundle:Programme')->findProgrammeAdmin();
+        $programmes = $em->getRepository('AppBundle:Programme')->findTypeProgramme($flag = 'traite');;
 
         return $this->render('programme/index.html.twig', array(
             'programmes' => $programmes,
@@ -89,6 +89,31 @@ class ProgrammeController extends Controller
               $em = $this->getDoctrine()->getManager();
               $programme->setStatut(true);
               $programme->setFlag('A traiter');//dump($programme);die();
+
+              //Verification de non cohincidence d'un programme regional
+              // Si la date ne coincide pas alors porter les modification sinon rejeter
+              $verif = $em->getRepository('AppBundle:Programme')
+                            ->verifProgrammeFinal(
+                                $type="region", 
+                                $flag ="valid", 
+                                $programme->getDatedeb(),
+                                $programme->getDatefin()
+                            );
+              //dump($verif);die();
+              if (!$verif){
+                $em->flush();
+              } else{
+                
+                $this->addFlash('notice', "Attention la région a une activité dans la même période du ".$programme->getDatedeb()." au ".$programme->getDatefin()." donc veuiller choisir une autre date!");
+                $editForm = $this->createForm('AppBundle\Form\ProgrammeUserType', $programme, array('user' => $user));
+                $editForm->handleRequest($request);
+
+                return $this->render('programme/editUser.html.twig', array(
+                    'programme' => $programme,
+                    'edit_form' => $editForm->createView(),
+                ));
+              }
+              
               $em->persist($programme);
               $em->flush();
 
@@ -124,7 +149,7 @@ class ProgrammeController extends Controller
     /**
      * Finds and displays a programme entity.
      *
-     * @Route("/{id}", name="programme_show")
+     * @Route("/{slug}", name="programme_show")
      * @Method("GET")
      */
     public function showAction(Programme $programme)
@@ -163,7 +188,32 @@ class ProgrammeController extends Controller
           $editForm->handleRequest($request);
 
           if ($editForm->isSubmitted() && $editForm->isValid()) {
-              $this->getDoctrine()->getManager()->flush();
+              
+              $em = $this->getDoctrine()->getManager();
+
+              //Verification de non cohincidence d'un programme regional
+              // Si la date ne coincide pas alors porter les modification sinon rejeter
+              $verif = $em->getRepository('AppBundle:Programme')
+                            ->verifProgrammeFinal(
+                                $type="region", 
+                                $flag ="valid", 
+                                $programme->getDatedeb(),
+                                $programme->getDatefin()
+                            );
+              //dump($verif);die();
+              if (!$verif){
+                $em->flush();
+              } else{
+                
+                $this->addFlash('notice', "Attention la région a une activité dans la même période du ".$programme->getDatedeb()." au ".$programme->getDatefin()." donc veuiller choisir une autre date!");
+
+                return $this->render('programme/editUser.html.twig', array(
+                    'programme' => $programme,
+                    'edit_form' => $editForm->createView(),
+                    'delete_form' => $deleteForm->createView(),
+                ));
+              }
+              
 
               return $this->redirectToRoute('programme_index');
           }

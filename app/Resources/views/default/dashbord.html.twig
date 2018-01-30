@@ -33,14 +33,9 @@
             <div class="panel panel-default panel-table">
               <div class="panel-heading">
                 <div class="panel-tools">
-                  <a href="{{ path('calendrier_non_traiter')}}">
+                  <a href="{{ path('calendrier_valider')}}">
                     <button type="button" class="btn btn-default btn-labeled"><i class="zmdi zmdi-calendar zmdi-hc-lg"></i>
                           <span class="btn-label btn-label-right">Calendrier</span>
-                    </button>
-                  </a>
-                  <a href="{{ path('programme_new')}}">
-                    <button type="button" class="btn btn-primary btn-labeled"><i class="zmdi zmdi-plus-square zmdi-hc-lg"></i>
-                          <span class="btn-label btn-label-right">Ajouter un nouveau programme</span>
                     </button>
                   </a>
                 </div>
@@ -55,7 +50,6 @@
                       <th>Departements</th>
                       <th>Activités</th>
                       <th>Cibles</th>
-                      <th>Status</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -71,15 +65,6 @@
                       <td><span style="color: #{{activite.departement.couleur}}">{{ activite.departement.nom|upper }}</span>  </td>
                       <td>{{ activite.activite }}</td>
                       <td>{{ activite.cible }}</td>
-                      <td>
-                        {% if activite.flag == 'Valider' %}
-                        <span class="label label-outline-success">{{ activite.flag }}</span>
-                        {% elseif activite.flag == 'A revoir'  %}
-                        <span class="label label-outline-warning">{{ activite.flag }}</span>
-                        {% else %}
-                        <span class="label label-outline-info">{{ activite.flag }}</span>
-                        {% endif %}
-                      </td>
                     </tr>
                     {% endfor %}
                   </tbody>
